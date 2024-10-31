@@ -1,0 +1,124 @@
+// Base class for Cars
+abstract class Car {
+    private String make;
+    private String model;
+    private int year;
+    private Engine engine; // Composition with Engine class
+
+    public Car(String make, String model, int year, Engine engine) {
+        this.make = make;
+        this.model = model;
+        this.year = year;
+        this.engine = engine;
+    }
+
+    // Polymorphic method
+    public abstract void accelerate();
+
+    public void startCar() {
+        System.out.println(make + " " + model + " is starting.");
+        engine.start();
+    }
+
+    @Override
+    public String toString() {
+        return year + " " + make + " " + model;
+    }
+}
+
+// Composition: Engine class
+class Engine {
+    private int horsepower;
+    private String type;
+
+    public Engine(int horsepower, String type) {
+        this.horsepower = horsepower;
+        this.type = type;
+    }
+
+    public void start() {
+        System.out.println("Engine with " + horsepower + " HP of type " + type + " is starting.");
+    }
+}
+
+// Derived class: Sedan
+class Sedan extends Car {
+    public Sedan(String make, String model, int year, Engine engine) {
+        super(make, model, year, engine);
+    }
+
+    @Override
+    public void accelerate() {
+        System.out.println("The Sedan accelerates smoothly.");
+    }
+}
+
+// Derived class: SUV
+class SUV extends Car {
+    public SUV(String make, String model, int year, Engine engine) {
+        super(make, model, year, engine);
+    }
+
+    @Override
+    public void accelerate() {
+        System.out.println("The SUV accelerates with power for tough terrains.");
+    }
+}
+
+// Derived class: ElectricCar
+class ElectricCar extends Car {
+    private Battery battery; // Composition with Battery class
+
+    public ElectricCar(String make, String model, int year, Engine engine, Battery battery) {
+        super(make, model, year, engine);
+        this.battery = battery;
+    }
+
+    @Override
+    public void accelerate() {
+        System.out.println("The ElectricCar accelerates silently and quickly.");
+    }
+
+    public void chargeBattery() {
+        System.out.println("Charging the electric car's battery.");
+        battery.charge();
+    }
+}
+
+// Composition: Battery class
+class Battery {
+    private int capacity;
+
+    public Battery(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public void charge() {
+        System.out.println("Battery with capacity " + capacity + " kWh is charging.");
+    }
+}
+
+// Main class to demonstrate functionality
+public class CarDemo {
+    public static void main(String[] args) {
+        Engine sedanEngine = new Engine(150, "Gasoline");
+        Engine suvEngine = new Engine(250, "Diesel");
+        Engine electricEngine = new Engine(200, "Electric");
+
+        Battery evBattery = new Battery(75);
+
+        Car sedan = new Sedan("Toyota", "Camry", 2021, sedanEngine);
+        Car suv = new SUV("Ford", "Explorer", 2022, suvEngine);
+        Car electricCar = new ElectricCar("Tesla", "Model S", 2023, electricEngine, evBattery);
+
+        sedan.startCar();
+        sedan.accelerate();
+
+        suv.startCar();
+        suv.accelerate();
+
+        electricCar.startCar();
+        electricCar.accelerate();
+        ((ElectricCar) electricCar).chargeBattery(); // Casting to access ElectricCar-specific method
+    }
+}
